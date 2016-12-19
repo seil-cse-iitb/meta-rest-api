@@ -77,6 +77,7 @@ class Sensor(models.Model):
     class Meta:
         unique_together = ('sensor_id', 'start_date')
 
+
 class SensorDatabase(models.Model):
     DATABASE_PURPOSE = (
         ('P', 'Primary Storage'),
@@ -88,8 +89,80 @@ class SensorDatabase(models.Model):
     database = models.ForeignKey(Database)
 
     def __str__(self):
-        return str(self.sensor) + ":" +  str(self.database)
+        return str(self.sensor) + ":" + str(self.database)
 
     class Meta:
-        unique_together = ('sensor', 'purpose','database')
+        unique_together = ('sensor', 'purpose', 'database')
 
+
+class Operation(models.Model):
+    operation_id = models.CharField(max_length=20, primary_key=True)
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+
+
+class Task(models.Model):
+    FREQUENCY =(
+        ('E', "Event Based"),
+        ('D', "Daily"),
+        ('H', "Hourly"),
+    )
+    task_id = models.CharField(max_length=20, primary_key=True)
+    # sensor = models.ForeignKey(Sensor)
+    channel = models.ForeignKey(SensorChannel)
+    data_source = models.ForeignKey(Database)
+    frequency = models.CharField(max_length=1, choices=FREQUENCY)
+    next_run = models.DateField()
+    operation = models.ForeignKey(Operation)
+
+    def __str__(self):
+        return str(self.task_id) + '-' + str(self.channel) + '-' + str(self.operation)
+
+
+class TaskCondition(models.Model):
+    CONDITION = (
+        ('=', "=="),
+        ('!', "!="),
+        ('<', "<"),
+        ('L', "<="),
+        ('>', ">"),
+        ('G', ">="),
+        ('C', "Count"),
+        ('I', "Increment By"),
+    )
+    task = models.ForeignKey(Task)
+
+    Field = models.ForeignKey(DataField)
+    condition = models.CharField(max_length=1, choices=CONDITION)
+    value = models.IntegerField()
+
+    def __str__(self):
+        return str(self.task) + '-' + str(self.Field) + '-' + str(self.condition) + '-' + str(self.value)
+
+
+class SensorTask(models.Model):
+    STATUS = (
+        ('R', 'Running'),
+        ('P', 'Pending'),
+        ('F', 'Finished'),
+        ('E', 'Error'),
+    )
+    task = models.ForeignKey(Task)
+    sensor = models.ForeignKey(Sensor)
+    run_date = models.DateField()
+    status = models.CharField(max_length=1, choices=STATUS)
+
+
+class SensorTaskLog(models.Model):
+    STATUS = (
+        ('R', 'Running'),
+        ('P', 'Pending'),
+        ('F', 'Finished'),
+        ('E', 'Error'),
+    )
+    task = models.ForeignKey(Task)
+    sensor = models.ForeignKey(Sensor)
+    run_date = models.DateField()
+    status = models.CharField(max_length=1, choices=STATUS)

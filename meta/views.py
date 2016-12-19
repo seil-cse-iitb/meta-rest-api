@@ -9,6 +9,7 @@ from .models import Database, SensorChannel ,Sensor ,SensorType, DataField
 # Create your views here.
 from django.http import HttpResponse
 
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -21,10 +22,10 @@ class JSONResponse(HttpResponse):
 
 def sensorLookup_rest(request, channel,location,sensor_type,mac):
     ch = SensorChannel.objects.filter(channel=channel,sensor_type=sensor_type)
-    if len(ch)==0 :
+    if len(ch) == 0:
         return HttpResponse("Channel information not available")
     s = Sensor.objects.filter(location=location, channel= ch[0].pk, mac_id = mac)
-    if len(s)==0 :
+    if len(s) == 0:
         return HttpResponse('{"error":"Sensor information not available"}')
     serializer = SensorSerializer(s[0])
     return JSONResponse(serializer.data)
@@ -32,17 +33,19 @@ def sensorLookup_rest(request, channel,location,sensor_type,mac):
 
 def database_rest(request, database_id):
     db = Database.objects.filter(database_id=database_id)
-    if len(db)==0 :
+    if len(db) == 0:
         return HttpResponse('{"error":"Database information not available"}')
     serializer = DatabaseSerializer(db[0])
     return JSONResponse(serializer.data)
 
+
 def channel_fields_rest(request,channel_id):
     df = DataField.objects.filter(sensor_type=channel_id)
-    if len(df)==0 :
+    if len(df) == 0:
         return HttpResponse('{"error":"Field information not available"}')
     serializer = FieldSerializer(df,many=True)
     return JSONResponse(serializer.data)
+
 
 def databases(request):
     databases = Database.objects.all()
@@ -51,9 +54,10 @@ def databases(request):
 
 
 def sensors(request):
-    sensors = Sensor.objects.all()
-    context = {'sensor_list': sensors}
+    sensor = Sensor.objects.all()
+    context = {'sensor_list': sensor}
     return render(request, 'meta/sensors.html', context)
+
 
 def sensor_rest(request, sensor_id):
     return HttpResponse("You're looking at sensor %s." % sensor_id)
@@ -63,6 +67,7 @@ def sensorTypes(request):
     sensor_type = SensorType.objects.all()
     context = {'sensor_type_list': sensor_type}
     return render(request, 'meta/sensor_types.html', context)
+
 
 def sensorType_rest(request, sensor_type_id):
     return HttpResponse("You're looking at sensor Type %s." % sensor_type_id)

@@ -1,0 +1,4 @@
+"database_id";"database_name";"schema";"type";"ip";"port";"user_id";"password"
+"mongo_data";"Mongo Production Data";"data";"G";"10.129.23.41";27017;"seil";"seil"
+"mqtt_aravali";"MQTT on aravali R-pi";"data";"Q";"10.175.50.100";1883;"seil";"seil"
+"mqtt_prod";"MQTT Production";"data";"Q";"10.129.23.41";1883;"seil";"seil"

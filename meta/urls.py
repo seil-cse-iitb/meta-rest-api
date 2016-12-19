@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # ex: /meta/databases
-    #url(r'^databases/$', views.databases, name='database'),
+    # url(r'^databases/$', views.databases, name='database'),
 
     # ex: /meta/sensor_lookup/<path>
     url(r'^sensor_lookup/(?P<channel>.+)/(?P<location>.+)/(?P<sensor_type>.+)/(?P<mac>.+)$', views.sensorLookup_rest),
@@ -27,6 +27,5 @@ urlpatterns = [
     url(r'^sensor_types/$', views.sensorTypes, name='sensors_types'),
     # ex: /meta/sensor_type/<type>
     url(r'^sensor_type/(?P<sensor_type_id>.+)/$', views.sensorType_rest, name='db_id'),
-
 
 ]

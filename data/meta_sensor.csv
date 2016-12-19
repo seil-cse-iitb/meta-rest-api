@@ -1,0 +1,106 @@
+sensor_id,sensor_name,location,mac_id,start_date,channel_id,database_id
+aravali_1,"B 216",aravali,1,2016-12-05,1,mongo_data
+aravali_10,"B 239",aravali,10,2016-12-05,1,mongo_data
+aravali_16,"B 249",aravali,16,2016-12-05,1,mongo_data
+aravali_17,"B 248",aravali,17,2016-12-05,1,mongo_data
+aravali_18,"B 251",aravali,18,2016-12-05,1,mongo_data
+aravali_2,"Not Working",aravali,2,2016-12-05,1,mongo_data
+aravali_200,"B 250",aravali,200,2016-12-05,1,mongo_data
+aravali_207,"B 207",aravali,207,2016-12-05,1,mongo_data
+aravali_208,"B 208 Not Working",aravali,208,2016-12-05,1,mongo_data
+aravali_209,"B 209",aravali,209,2016-12-05,1,mongo_data
+aravali_21,"B 252",aravali,21,2016-12-05,1,mongo_data
+aravali_210,"Meter  210",aravali,210,2016-12-05,1,mongo_data
+aravali_211,"B 211",aravali,211,2016-12-05,1,mongo_data
+aravali_212,"B 212",aravali,212,2016-12-05,1,mongo_data
+aravali_213,"B 213",aravali,213,2016-12-05,1,mongo_data
+aravali_214,"B 214",aravali,214,2016-12-05,1,mongo_data
+aravali_215,"Meter 215",aravali,215,2016-12-05,1,mongo_data
+aravali_217,"B 217 Not Working",aravali,217,2016-12-05,1,mongo_data
+aravali_218,"B 218",aravali,218,2016-12-05,1,mongo_data
+aravali_219,"B 219",aravali,219,2016-12-05,1,mongo_data
+aravali_22,"B 253 Not Working",aravali,22,2016-12-05,1,mongo_data
+aravali_221,"B 221",aravali,221,2016-12-05,1,mongo_data
+aravali_223,"B 223",aravali,223,2016-12-05,1,mongo_data
+aravali_224,"B 224",aravali,224,2016-12-05,1,mongo_data
+aravali_225,"B 225",aravali,225,2016-12-05,1,mongo_data
+aravali_226,"B 226",aravali,226,2016-12-05,1,mongo_data
+aravali_227,"B 227",aravali,227,2016-12-05,1,mongo_data
+aravali_228,"B 228",aravali,228,2016-12-05,1,mongo_data
+aravali_229,"B 229",aravali,229,2016-12-05,1,mongo_data
+aravali_23,"B 254",aravali,23,2016-12-05,1,mongo_data
+aravali_230,"Meter 230",aravali,230,2016-12-05,1,mongo_data
+aravali_231,"B 231",aravali,231,2016-12-05,1,mongo_data
+aravali_233,"B 233",aravali,233,2016-12-05,1,mongo_data
+aravali_234,"B 234",aravali,234,2016-12-05,1,mongo_data
+aravali_235,"B 235",aravali,235,2016-12-05,1,mongo_data
+aravali_236,"B 236",aravali,236,2016-12-05,1,mongo_data
+aravali_237,"B 237",aravali,237,2016-12-05,1,mongo_data
+aravali_238,"B 238",aravali,238,2016-12-05,1,mongo_data
+aravali_239,"B 239",aravali,239,2016-12-05,1,mongo_data
+aravali_24,"B 255",aravali,24,2016-12-05,1,mongo_data
+aravali_240,"B 240",aravali,240,2016-12-05,1,mongo_data
+aravali_241,"B 241",aravali,241,2016-12-05,1,mongo_data
+aravali_242,"B 242",aravali,242,2016-12-05,1,mongo_data
+aravali_243,"B 243",aravali,243,2016-12-05,1,mongo_data
+aravali_244,"B 244",aravali,244,2016-12-05,1,mongo_data
+aravali_245,"B 245",aravali,245,2016-12-05,1,mongo_data
+aravali_246,"B 246",aravali,246,2016-12-05,1,mongo_data
+aravali_247,"B 247",aravali,247,2016-12-05,1,mongo_data
+aravali_25,"B 256",aravali,25,2016-12-05,1,mongo_data
+aravali_26,"B 257",aravali,26,2016-12-05,1,mongo_data
+aravali_27,"B 258",aravali,27,2016-12-05,1,mongo_data
+aravali_28,"B 259",aravali,28,2016-12-05,1,mongo_data
+aravali_29,"B 260",aravali,29,2016-12-05,1,mongo_data
+aravali_3,"B 217",aravali,3,2016-12-05,1,mongo_data
+aravali_30,"B 261",aravali,30,2016-12-05,1,mongo_data
+aravali_31,"B 262",aravali,31,2016-12-05,1,mongo_data
+aravali_32,"B 263",aravali,32,2016-12-05,1,mongo_data
+aravali_34,"B 264",aravali,34,2016-12-05,1,mongo_data
+aravali_35,"B 265",aravali,35,2016-12-05,1,mongo_data
+aravali_36,"B 266",aravali,36,2016-12-05,1,mongo_data
+aravali_37,"B 267",aravali,37,2016-12-05,1,mongo_data
+aravali_4,"B 210",aravali,4,2016-12-05,1,mongo_data
+aravali_5,"B 220",aravali,5,2016-12-05,1,mongo_data
+aravali_6,"B 222",aravali,6,2016-12-05,1,mongo_data
+aravali_8,"B 232",aravali,8,2016-12-05,1,mongo_data
+aravali_meter11,"Meter 11",aravali,11,2016-12-05,1,mongo_data
+aravali_meter19,"Meter 19",aravali,19,2016-12-05,1,mongo_data
+power_k_a,"KReSIT AC",kresit,2,2016-12-05,3,mongo_data
+power_k_ch_a,"Circular Hall AC",kresit,33,2016-12-05,3,mongo_data
+power_k_ch_l,"Circular Hall Lights",kresit,26,2016-12-05,3,mongo_data
+power_k_ch_p1,"Circular Hall Power Sockets",kresit,24,2016-12-05,3,mongo_data
+power_k_ch_p2,"Circular Hall Power Sockets",kresit,25,2016-12-05,3,mongo_data
+power_k_clsrm_ac1,"Classroom ODU 1",kresit,30,2016-12-14,3,mongo_data
+power_k_clsrm_ac2,"Classroom ODU 2",kresit,31,2016-12-05,3,mongo_data
+power_k_clsrm_ac3,"Classroom ODU 3",kresit,32,2016-12-05,3,mongo_data
+power_k_cr_a1,"Conference Room",kresit,22,2016-12-05,3,mongo_data
+power_k_cr_a2,"Conference Room",kresit,23,2016-12-05,3,mongo_data
+power_k_dil_a,"DIL AC",kresit,28,2016-12-05,3,mongo_data
+power_k_dil_l,"DIL Lights",kresit,27,2016-12-05,3,mongo_data
+power_k_dil_p,"DIL Power Sockets",kresit,29,2016-12-05,3,mongo_data
+power_k_erts_a,"ERTS Lab AC",kresit,16,2016-12-05,3,mongo_data
+power_k_erts_l,"ERTS Lab Lights",kresit,15,2016-12-05,3,mongo_data
+power_k_erts_p,"ERTS Lab Power Sockets",kresit,14,2016-12-05,3,mongo_data
+power_k_f2_a,"Wing C Floor 2 AC",kresit,8,2016-12-05,3,mongo_data
+power_k_f2_l,"Wing C Floor 2 Lights",kresit,7,2016-12-05,3,mongo_data
+power_k_f2_p,"Wing C Floor 2 Power Sockets",kresit,9,2016-12-05,3,mongo_data
+power_k_fck_a,"F C Kohli AC",kresit,17,2016-12-05,3,mongo_data
+power_k_fck_l,"F C Kohli Lights",kresit,18,2016-12-05,3,mongo_data
+power_k_lab_od1,"LAB ODU 1",kresit,34,2016-12-05,3,mongo_data
+power_k_lab_od2,"LAB ODU 2",kresit,35,2016-12-05,3,mongo_data
+power_k_lab_od3,"LAB ODU 3",kresit,36,2016-12-05,3,mongo_data
+power_k_m,"KReSIT Mains",kresit,1,2016-12-05,3,mongo_data
+power_k_off_a,"Office AC",kresit,21,2016-12-05,3,mongo_data
+power_k_off_l,"Office Lights",kresit,20,2016-12-05,3,mongo_data
+power_k_p,"KReSIT Power Sockets",kresit,3,2016-12-05,3,mongo_data
+power_k_seil_a,"SEIL AC",kresit,37,2016-12-05,3,mongo_data
+power_k_seil_l,"SEIL Lights",kresit,39,2016-12-05,3,mongo_data
+power_k_seil_p,"SEIL Power Sockets",kresit,38,2016-12-05,3,mongo_data
+power_k_sr_a,"Server Room AC",kresit,12,2016-12-05,3,mongo_data
+power_k_sr_p,"Server Room Power Sockets",kresit,13,2016-12-05,3,mongo_data
+power_k_wc_a,"Wing C AC",kresit,5,2016-12-05,3,mongo_data
+power_k_wc_l,"Wing C Lights",kresit,4,2016-12-05,3,mongo_data
+power_k_wc_p,"Wing C Power Sockets",kresit,6,2016-12-05,3,mongo_data
+power_k_yc_a,"Yahoo Cluster AC",kresit,11,2016-12-05,3,mongo_data
+power_k_yc_p,"Yahoo Cluster Power Sockets",kresit,10,2016-12-05,3,mongo_data
