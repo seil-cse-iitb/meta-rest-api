@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c326241-384a-4b6a-8786-3f2a83a9a709" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_monitor/DataMonitor.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_monitor/MqttEventThread.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/meta/admin.py" afterPath="$PROJECT_DIR$/meta/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/meta/models.py" afterPath="$PROJECT_DIR$/meta/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_monitor/MailingThread.py" afterPath="$PROJECT_DIR$/data_monitor/MailingThread.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -92,7 +86,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MqttEventThread.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MailingThread.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data_monitor/MailingThread.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MqttEventThread.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_monitor/MqttEventThread.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-727">
@@ -138,6 +144,7 @@
         <option value="$PROJECT_DIR$/data_monitor/DataMonitor.py" />
         <option value="$PROJECT_DIR$/meta/models.py" />
         <option value="$PROJECT_DIR$/data_monitor/MqttEventThread.py" />
+        <option value="$PROJECT_DIR$/data_monitor/MailingThread.py" />
       </list>
     </option>
   </component>
@@ -615,6 +622,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data_monitor/MqttEventThread.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-727">
+          <caret line="42" column="9" lean-forward="false" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data_monitor/DataMonitor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -623,10 +640,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_monitor/MqttEventThread.py">
+    <entry file="file://$PROJECT_DIR$/data_monitor/MailingThread.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-727">
-          <caret line="42" column="9" lean-forward="false" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+        <state relative-caret-position="578">
+          <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
