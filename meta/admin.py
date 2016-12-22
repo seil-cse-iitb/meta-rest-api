@@ -56,9 +56,9 @@ class OperationAdmin(admin.ModelAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('task_id', 'channel', 'data_source', 'frequency', 'next_run', 'operation')
-    list_filter = ('channel', 'data_source', 'frequency', 'next_run', 'operation')
-    search_fields = ['sensor', 'data_source']
+    list_display = ('task_id', 'channel', 'data_source', 'frequency', 'next_run', 'description' )
+    list_filter = ('channel', 'data_source', 'frequency', 'next_run')
+    search_fields = ['sensor', 'data_source','description']
 
 
 @admin.register(TaskCondition)

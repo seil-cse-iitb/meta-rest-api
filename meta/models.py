@@ -115,10 +115,11 @@ class Task(models.Model):
     data_source = models.ForeignKey(Database)
     frequency = models.CharField(max_length=1, choices=FREQUENCY)
     next_run = models.DateField()
-    operation = models.ForeignKey(Operation)
+    #operation = models.ForeignKey(Operation)
+    description = models.CharField(max_length=50)
 
     def __str__(self):
-        return str(self.task_id) + '-' + str(self.channel) + '-' + str(self.operation)
+        return str(self.task_id) + '-' + str(self.channel) + '-' + str(self.description)
 
 
 class TaskCondition(models.Model):
@@ -137,6 +138,7 @@ class TaskCondition(models.Model):
     Field = models.ForeignKey(DataField)
     condition = models.CharField(max_length=1, choices=CONDITION)
     value = models.IntegerField()
+    ignore_count = models.IntegerField()
 
     def __str__(self):
         return str(self.task) + '-' + str(self.Field) + '-' + str(self.condition) + '-' + str(self.value)
@@ -151,8 +153,10 @@ class SensorTask(models.Model):
     )
     task = models.ForeignKey(Task)
     sensor = models.ForeignKey(Sensor)
-    run_date = models.DateField()
+    run_date = models.DateTimeField()
     status = models.CharField(max_length=1, choices=STATUS)
+    expected = models.CharField(max_length=50)
+    actual = models.CharField(max_length=50)
 
 
 class SensorTaskLog(models.Model):
