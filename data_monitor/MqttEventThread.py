@@ -3,28 +3,33 @@ import multiprocessing
 import paho.mqtt.client as mqtt
 import pymysql
 import datetime
+import Queue
 
 def on_message(client, userdata, msg):
     userdata.process_message(msg.topic, msg.payload)
 
 class MqttEventThread(multiprocessing.Process):
-    def __init__(self,parameters):
+    def __init__(self,parameters,task_que):
         super(MqttEventThread, self).__init__()
         self.params = parameters
         self.exit = multiprocessing.Event()
         self.msgCount = {}
-        self.condition = parameters['condition']
-        self.frequency = parameters['frequency']
-        self.field_number = int(parameters['field_number']) -1
-        self.value = parameters['value']
-        self.ignore_count = parameters['ignore_count']
+        self.task = {}
+        #self.topics = {}
+
+        self.task_que = task_que
+        # self.condition = parameters['condition']
+        # self.frequency = parameters['frequency']
+        # self.field_number = int(parameters['field_number']) -1
+        # self.value = parameters['value']
+        # self.ignore_count = parameters['ignore_count']
         #self.ignore_count = 2
         self.count_outside = {}
         self.lastMsgData = {}
-
-        if self.condition == 'C':
-            if self.frequency == 'H':
-                self.t_next = ((int(time.time() + 1800) / 3600) + 1)
+        self.connected = False
+        #if self.condition == 'C':
+        #    if self.frequency == 'H':
+        #        self.t_next = ((int(time.time() + 1800) / 3600) + 1)
 
     def log_event_for_topic(self, topic, actual, expected):
         sql0 = "SELECT sensor_id FROM data_logging.meta_sensor s, meta_sensorchannel c where channel = %s and "
@@ -52,44 +57,33 @@ class MqttEventThread(multiprocessing.Process):
         connection.commit()
         connection.close()
 
-
     def process_message(self, topic, msg):
-        if topic not in self.msgCount:
-            self.msgCount[topic] = 0
-            self.count_outside[topic] = 0
-            self.lastMsgData[topic] = 0
-        if self.condition  == 'C':
-            self.msgCount[topic] += 1
-            if self.frequency == 'H':
-                if int((time.time() + 1800) / 3600) == self.t_next:
-                    self.t_next += 1
-                    if self.value < self.msgCount[topic]:
-                        self.count_outside[topic] += 1
-                        print self.params, topic, self.count_outside[topic], self.ignore_count
-                        if self.count_outside[topic] >= self.ignore_count:
-                            print self.condition , "condition violated ", self.params, topic
+        # print "topic received", topic
+        t_fields = topic.split("/")
+        for t in self.task:
+            if self.task[t]['schema'] == t_fields[0] and  self.task[t]['sensor_type_id'] == t_fields[2]:
+                self.check_msg_for_task(topic,msg,self.task[t])
 
-                            # self.qname.put((topic,msg))
-                            self.count_outside[topic] = 0
-                    else:
-                        self.count_outside[topic] = 0
-                    self.msgCount[topic] = 0
-
-        if self.condition == 'I':
+    def check_msg_for_task(self,topic,msg,task):
+        if task["condition"] == 'I':
+            if topic not in self.lastMsgData:
+                self.lastMsgData[topic] = 0
+                self.count_outside[topic] = 0
             cols = msg.split(",")
-            new_value = float(cols[self.field_number])
-            if self.lastMsgData[topic] + self.value > new_value:
+            # print cols
+            new_value = float(cols[task["field_number"] - 1])
+            if self.lastMsgData[topic] + task["value"] > new_value:
                 self.count_outside[topic] += 1
-                print topic, self.value, new_value, self.count_outside[topic], self.ignore_count
-                if self.count_outside[topic] >= self.ignore_count:
-                    print self.condition  , "condition violated ", topic, self.lastMsgData[topic], new_value
-                    self.log_event_for_topic(topic,new_value,self.lastMsgData[topic] + self.value)
+                print topic, task["value"], new_value, self.count_outside[topic], task["ignore_count"]
+                if self.count_outside[topic] >= task["ignore_count"]:
+                    print task["condition"]  , "condition violated ", topic, self.lastMsgData[topic], new_value
+                    self.log_event_for_topic(topic,new_value,self.lastMsgData[topic] + task["value"])
                     self.count_outside[topic] = 0
             self.lastMsgData[topic] = new_value
 
-        if self.condition in ['=', '!', '<', 'L', '>', 'G']:
+        if task["condition"] in ['=', '!', '<', 'L', '>', 'G']:
             cols = msg.split(",")
-            val = float(cols[self.field_number])
+            val = float(cols[task["field_number"]])
             result = {
                 '=': lambda x, y: x == y,
                 '!': lambda x, y: x != y,
@@ -98,36 +92,54 @@ class MqttEventThread(multiprocessing.Process):
                 '>': lambda x, y: x > y,
                 'G': lambda x, y: x >= y,
             }
-            if not result[self.condition](val, self.value):
+            if not result[task["condition"]](val, task["value"]):
                 self.count_outside[topic] += 1
-                if self.count_outside[topic] >= self.ignore_count:
+                if self.count_outside[topic] >= task["ignore_count"]:
                     print "condition violated ", self.params, topic
                     self.count_outside[topic] = 0
 
     def stop(self):
         self.exit.set()
-        
-    def run(self):
-        client = mqtt.Client('Monitor_' + self.params['task_id'], userdata=self, protocol=mqtt.MQTTv311, clean_session=False)
-        # client.on_connect = on_connect
-        client.on_message = on_message
 
-        connected = False
-        while not connected:
+    def get_next_queue_message(self):
+        try:
+            task = self.task_que.get(timeout=0.1)
+            #print "received " ,task
+            return (task)
+        except Queue.Empty:
+            return None
+
+    def run(self):
+        self.client = mqtt.Client('Monitor_' + self.params['data_source_id'], userdata=self, protocol=mqtt.MQTTv311, clean_session=True)
+        # client.on_connect = on_connect
+        self.client.on_message = on_message
+
+        self.connected = False
+        while not self.connected:
             print "Try to connect to reader MQTT", self.params['ip'], int(self.params['port'])
             try:
-                client.connect(self.params['ip'], int(self.params['port']), 600)
-                connected = True
+                self.client.connect(self.params['ip'], int(self.params['port']), 600)
+                self.connected = True
+                print "Connected"
+                self.client.loop_start()
             except IOError:
                 print "Could not Connect"
                 time.sleep(1)
 
-        topic = self.params['schema'] + '/+/' + self.params['sensor_type_id'] + "/+"
-        print "Subscribing to:", ":" + topic + ":"
-        client.subscribe(topic, qos=1)
-
-        client.loop_start()
-
         while not self.exit.is_set():
+            task = self.get_next_queue_message()
+            if task is not None:
+                self.add_task(task)
             time.sleep(1)
         print "Reader Stopped"
+
+    def add_task(self, t):
+        while not self.connected:
+            time.sleep(1)
+        if t["task_id"] not in self.task:
+            print "adding Task", t
+            self.task[t["task_id"]] = t
+            topic = t['schema'] + '/+/' + t['sensor_type_id'] + "/+"
+            print "Subscribing to:", ":" + topic + ":"
+            self.client.subscribe(topic, qos=0)
+

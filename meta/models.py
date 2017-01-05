@@ -11,6 +11,7 @@ class Database(models.Model):
         ('Q', 'MQTT'),
         ('G', 'MongoDB'),
         ('S', 'MySQL'),
+        ('U', 'UDP Proxy'),
     )
     database_name = models.CharField(max_length=50)
     schema = models.CharField(max_length=50)
@@ -116,7 +117,8 @@ class Task(models.Model):
     frequency = models.CharField(max_length=1, choices=FREQUENCY)
     next_run = models.DateField()
     #operation = models.ForeignKey(Operation)
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+    mail_to = models.CharField(max_length=500)
 
     def __str__(self):
         return str(self.task_id) + '-' + str(self.channel) + '-' + str(self.description)
@@ -139,6 +141,7 @@ class TaskCondition(models.Model):
     condition = models.CharField(max_length=1, choices=CONDITION)
     value = models.IntegerField()
     ignore_count = models.IntegerField()
+    margin = models.IntegerField()
 
     def __str__(self):
         return str(self.task) + '-' + str(self.Field) + '-' + str(self.condition) + '-' + str(self.value)

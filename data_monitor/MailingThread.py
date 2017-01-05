@@ -58,17 +58,19 @@ class MailingThread(multiprocessing.Process):
 
         cursor = connection.cursor()
 
-        cursor.execute("SELECT id,run_date,sensor_id, expected, actual,description FROM data_logging.meta_sensortask s, meta_task t where s.task_id = t.task_id and  id > %s;",(self.max_id,))
+        cursor.execute("SELECT id,run_date,sensor_id, expected, actual,description,mail_to FROM data_logging.meta_sensortask s, meta_task t where s.task_id = t.task_id and  id > %s;",(self.max_id,))
         rec = cursor.fetchall()
 
-        msg = ""
+        msg = {}
 
         for x in rec:
             if self.max_id < int(x['id']):
                 self.max_id = int(x['id'])
-            msg += "At " + str(x[u'run_date']) + " " + x['sensor_id'] + " " +  x['description'] + " " + x['actual'] + " " + x['expected'] + "\n"
-            print "At " + str(x[u'run_date']),x['sensor_id'] , x['description'],x['actual'], x['expected']
-        
+            if x[u'mail_to'] not in msg:
+                msg[x[u'mail_to']] =""
+            msg[x[u'mail_to']] += "At " + str(x[u'run_date']) + " " + x['sensor_id'] + " " +  x['description'].format(actual = x['actual'], expected = x['expected']) + "\n"
+            print "At " + str(x[u'run_date']),x['sensor_id'] , x['description'].format(actual = x['actual'], expected = x['expected'])
+        print "update counter to ",  self.max_id
         cursor.execute("update meta_stat set max_id = %s", (self.max_id,))
         connection.commit()
         connection.close()
@@ -81,11 +83,12 @@ class MailingThread(multiprocessing.Process):
        
         ctr = 0
         while not self.exit.is_set():
+            # print ctr
             if ctr >= 60:
                 ctr = 0
                 msg = self.get_message()
-                if msg != "":
-                    self.send_alert_mail("rohitrgupta@gmail.com",msg, "Logging Alert")
+                for k in msg:
+                    self.send_alert_mail(k,msg[k], "Logging Alert")
             time.sleep(1)
             ctr += 1
             
