@@ -12,10 +12,10 @@ class MongoDbThread(multiprocessing.Process):
         # self.params = parameters
         self.exit = multiprocessing.Event()
         self.qname = mongo_q
-        self.sensor_rask_count = {}
+        self.sensor_task_count = {}
         self.msgCount = {}
-        self.count_outside = {}
         self.lastMsgData = {}
+        print "Mongo init done"
 
     def log_event_for_topic(self, topic, actual, expected):
         sql0 = "SELECT sensor_id FROM data_logging.meta_sensor s, meta_sensorchannel c where channel = %s and "
@@ -31,14 +31,14 @@ class MongoDbThread(multiprocessing.Process):
 
         cursor = connection.cursor()
         t = tuple(topic.split("/"))
-        #print sql0, t
+        # print sql0, t
         cursor.execute(sql0,t)
         result = cursor.fetchall()
         sensor_id = result[0]['sensor_id']
 
         # get the list of task.
         l =(self.params['task_id'],str(sensor_id),datetime.datetime.today(),'E', actual, expected)
-        #print sql1,l
+        # print sql1,l
         cursor.execute(sql1,l)
         connection.commit()
         connection.close()
@@ -59,7 +59,7 @@ class MongoDbThread(multiprocessing.Process):
 
         # get the list of task.
         l =(task['task_id'],task['sensor_id'],task['next_run'],'E', actual, task['value'])
-        print sql1,l
+        # print sql1,l
         cursor.execute(sql1,l)
         connection.commit()
         connection.close()
@@ -74,27 +74,27 @@ class MongoDbThread(multiprocessing.Process):
         
         # print "key is ", key 
         if task["condition"] == 'C':
-            print key, date_Range, 
+            # print key, date_Range,
             row_count = table.find({"$and": [{"TS": {"$gt": date_Range[0]}},{"TS": {"$lt": date_Range[1]}}]},
                              { "TS": 1} ).count()
-            print row_count
+            # print row_count
             if row_count < task['value'] - task['margin'] :
-                if key not in self.sensor_rask_count:
-                    self.sensor_rask_count[key] = 0
-                    self.count_outside[key] = 0 
-                self.sensor_rask_count[key] += 1
-                if self.count_outside[key] >= task["ignore_count"]:
+                if key not in self.sensor_task_count:
+                    self.sensor_task_count[key] = 0
+                self.sensor_task_count[key] += 1
+                # print "mongo task", task
+                if self.sensor_task_count[key] >= task["ignore_count"]:
                     # print "condition violated ", task, row_count
                     # self.qname.put((topic,msg))
                     self.log_event_for_task(task,row_count)
-                    self.count_outside[key] = 0
+                    self.sensor_task_count[key] = 0
             else:
-                self.sensor_rask_count[key] = 0
+                self.sensor_task_count[key] = 0
 
     def get_next_queue_message(self):
         try:
             task = self.qname.get(timeout=0.1)
-            #print "received " ,task
+            # print "received " ,task
             return (task)
         except Queue.Empty:
             return None
@@ -107,11 +107,11 @@ class MongoDbThread(multiprocessing.Process):
         while not self.exit.is_set():
             task = self.get_next_queue_message()
             if task is not None:
-                print "task Received ", task["next_run"], task["sensor_id"]
+                # print "Mongo task Received ", task["next_run"], task["sensor_id"]
                 dt_start = datetime.datetime(1970, 1, 1)
-                #print task['next_run'],dt_start 
+                # print task['next_run'],dt_start
                 ts_2 = (task['next_run'] - dt_start).total_seconds() - 5.5 * 3600
-                #print ts_2
+                # print ts_2
 
                 if task['frequency'] == 'H':
                     period = [ ts_2 - 3600, ts_2]

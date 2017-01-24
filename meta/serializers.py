@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Database, SensorChannel ,Sensor ,SensorType, DataField
+from .models import Database, SensorChannel ,Sensor ,SensorType, DataField, SensorDatabase
 
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,8 @@ class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataField
         fields = ('field_number','field_name','field_type')
+
+class SensorDatabaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SensorDatabase
+        fields = ('sensor','purpose','database')

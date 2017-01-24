@@ -12,11 +12,12 @@ class Database(models.Model):
         ('G', 'MongoDB'),
         ('S', 'MySQL'),
         ('U', 'UDP Proxy'),
+        ('I', 'Iqlect Server'),
     )
     database_name = models.CharField(max_length=50)
     schema = models.CharField(max_length=50)
     type = models.CharField(max_length=1, choices=SOURCE_TYPES)
-    ip = models.CharField(max_length=15)
+    ip = models.CharField(max_length=150)
     port = models.IntegerField()
     user_id = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
@@ -50,6 +51,7 @@ class DataField(models.Model):
     FIELD_TYPES =(
         ('I','Integer'),
         ('F', 'Float'),
+        ('S', 'String'),
     )
     sensor_type = models.ForeignKey(SensorChannel)
     field_number = models.IntegerField()
@@ -84,6 +86,7 @@ class SensorDatabase(models.Model):
         ('P', 'Primary Storage'),
         ('B', 'Primary Broker'),
         ('L', 'Local Broker'),
+        ('R', 'Iqlect Rest API'),
     )
     sensor = models.ForeignKey(Sensor)
     purpose = models.CharField(max_length=1, choices=DATABASE_PURPOSE)
@@ -109,6 +112,7 @@ class Task(models.Model):
         ('E', "Event Based"),
         ('D', "Daily"),
         ('H', "Hourly"),
+        ('5', "Every 5 Minutes"),
     )
     task_id = models.CharField(max_length=20, primary_key=True)
     # sensor = models.ForeignKey(Sensor)
@@ -134,12 +138,16 @@ class TaskCondition(models.Model):
         ('G', ">="),
         ('C', "Count"),
         ('I', "Increment By"),
+        ('S', "Sting is same"),
+        ('T', "Sting is Not same"),
+
     )
     task = models.ForeignKey(Task)
 
     Field = models.ForeignKey(DataField)
     condition = models.CharField(max_length=1, choices=CONDITION)
     value = models.IntegerField()
+    string_value = models.CharField(max_length=50)
     ignore_count = models.IntegerField()
     margin = models.IntegerField()
 
@@ -173,3 +181,10 @@ class SensorTaskLog(models.Model):
     sensor = models.ForeignKey(Sensor)
     run_date = models.DateField()
     status = models.CharField(max_length=1, choices=STATUS)
+
+class ExcludeSensor(models.Model):
+    task = models.ForeignKey(Task)
+    sensor = models.ForeignKey(Sensor)
+
+    class Meta:
+        unique_together = ('task','sensor')

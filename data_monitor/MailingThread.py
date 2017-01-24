@@ -6,9 +6,11 @@ import smtplib
 
 class MailingThread(multiprocessing.Process):
     def __init__(self):
+        print "mailer init start"
         super(MailingThread, self).__init__()
         self.exit = multiprocessing.Event()
         self.get_maxid()
+        print "mailer init done"
         
     def init_mail(self):
         smtpserver = smtplib.SMTP("smtp.cse.iitb.ac.in",25)
@@ -16,7 +18,6 @@ class MailingThread(multiprocessing.Process):
         smtpserver.starttls()
         smtpserver.ehlo()
         smtpserver.esmtp_features['auth'] = 'LOGIN DIGEST-MD5 PLAIN'
-
         return smtpserver
 
     def close_mail_connection(self,smtpserver):
@@ -58,7 +59,12 @@ class MailingThread(multiprocessing.Process):
 
         cursor = connection.cursor()
 
-        cursor.execute("SELECT id,run_date,sensor_id, expected, actual,description,mail_to FROM data_logging.meta_sensortask s, meta_task t where s.task_id = t.task_id and  id > %s;",(self.max_id,))
+        sql1 = """SELECT id,run_date,x.sensor_name, expected, actual,description,mail_to
+            FROM data_logging.meta_sensortask s, meta_task t, meta_sensor x
+            where (x.sensor_id) not in ( select sensor_id from meta_excludesensor )
+            and s.task_id = t.task_id and s.sensor_id = x.sensor_id and  id > %s;"""
+
+        cursor.execute(sql1,(self.max_id,))
         rec = cursor.fetchall()
 
         msg = {}
@@ -68,8 +74,8 @@ class MailingThread(multiprocessing.Process):
                 self.max_id = int(x['id'])
             if x[u'mail_to'] not in msg:
                 msg[x[u'mail_to']] =""
-            msg[x[u'mail_to']] += "At " + str(x[u'run_date']) + " " + x['sensor_id'] + " " +  x['description'].format(actual = x['actual'], expected = x['expected']) + "\n"
-            print "At " + str(x[u'run_date']),x['sensor_id'] , x['description'].format(actual = x['actual'], expected = x['expected'])
+            msg[x[u'mail_to']] += "At " + str(x[u'run_date']) + " " + str(x['id']) + " " + x['sensor_name'] + " " +  x['description'].format(actual = x['actual'], expected = x['expected']) + "\n"
+            print "At " + str(x[u'run_date']),x['sensor_name'] , x['description'].format(actual = x['actual'], expected = x['expected'])
         print "update counter to ",  self.max_id
         cursor.execute("update meta_stat set max_id = %s", (self.max_id,))
         connection.commit()
@@ -91,5 +97,5 @@ class MailingThread(multiprocessing.Process):
                     self.send_alert_mail(k,msg[k], "Logging Alert")
             time.sleep(1)
             ctr += 1
-            
+            # time.sleep(1)
         print "Mailer Stopped"

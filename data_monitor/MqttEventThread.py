@@ -137,9 +137,9 @@ class MqttEventThread(multiprocessing.Process):
         while not self.connected:
             time.sleep(1)
         if t["task_id"] not in self.task:
-            print "adding Task", t
+            # print "adding MQTT Task", t
             self.task[t["task_id"]] = t
             topic = t['schema'] + '/+/' + t['sensor_type_id'] + "/+"
-            print "Subscribing to:", ":" + topic + ":"
+            # print "Subscribing to:", ":" + topic + ":"
             self.client.subscribe(topic, qos=0)
 

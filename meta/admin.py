@@ -44,7 +44,7 @@ class SensorAdmin(admin.ModelAdmin):
 class SensorDatabaseAdmin(admin.ModelAdmin):
     list_display = ('sensor', 'purpose', 'database')
     list_filter = ('sensor', 'purpose', 'database')
-    # search_fields = ['sensor','purpose','database']
+    # search_fields = ['sensor']
 
 
 @admin.register(Operation)
@@ -63,7 +63,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(TaskCondition)
 class TaskConditionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'Field', 'condition', 'value')
+    list_display = ('task', 'Field', 'condition', 'value','string_value')
     list_filter = ('task', 'Field')
     search_fields = ['task', 'Field']
 
@@ -72,4 +72,11 @@ class TaskConditionAdmin(admin.ModelAdmin):
 class SensorTaskAdmin(admin.ModelAdmin):
     list_display = ('task', 'sensor', 'run_date', 'status')
     list_filter = ('task', 'sensor', 'run_date', 'status')
+    search_fields = ['task', 'sensor']
+
+
+@admin.register(ExcludeSensor)
+class SensorTaskAdmin(admin.ModelAdmin):
+    list_display = ('task', 'sensor')
+    list_filter = ('task', 'sensor')
     search_fields = ['task', 'sensor']
