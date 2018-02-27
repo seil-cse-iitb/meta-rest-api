@@ -12,11 +12,21 @@ urlpatterns = [
     # ex: /meta/database/<database name>
     url(r'^database/(?P<database_id>.+)$', views.database_rest),
 
+    # ex: /meta/channel_fields/<channel id>
+    url(r'^channel_fields/(?P<channel_id>.+)$', views.channel_fields_rest),
+
     # ex: /meta/channel/<channel id>
     url(r'^channel/(?P<channel_id>.+)$', views.channel_fields_rest),
 
+    # ex: /meta/channels/
+    url(r'^channels/$', views.channels_view),
+
     # ex: /meta/sensors
     url(r'^sensors/$', views.sensor_list),
+
+    # ex: /meta/sensors/<channel_id>
+    url(r'^sensors/(?P<channel_id>.+)$', views.sensor_list_channel),
+
 
     # ex: /meta/database/<database name>
     url(r'^sensor/(?P<sensor_id>.+)/$', views.sensor_rest, name='db_id'),

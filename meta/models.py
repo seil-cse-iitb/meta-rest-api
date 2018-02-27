@@ -38,9 +38,11 @@ class SensorChannel(models.Model):
         ('data', 'Data'),
         ('H', 'Hartbeat'),
         ('info', 'Sensor information'),
+        ('nodemcu', 'nodemcu'),
     )
     sensor_type = models.ForeignKey(SensorType)
-    channel = models.CharField(max_length=5, choices=CHANNEL_TYPES)
+    channel = models.CharField(max_length=10, choices=CHANNEL_TYPES)
+    display_name = models.CharField(max_length=50)
 
     def __str__(self):
         return str(self.sensor_type) + ' : ' + str(self.channel)
@@ -68,6 +70,7 @@ class Sensor(models.Model):
     sensor_id = models.CharField(max_length=20,primary_key=True)
     channel = models.ForeignKey(SensorChannel)
     sensor_name = models.CharField(max_length=50)
+    public_name = models.CharField(max_length=50)
     #sensor_type = models.ForeignKey(SensorType)
     location = models.CharField(max_length=50)
     mac_id = models.CharField(max_length=50)

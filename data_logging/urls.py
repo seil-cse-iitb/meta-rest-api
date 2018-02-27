@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+#added by shinjan
+from rest_framework.documentation import include_docs_urls
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -38,6 +40,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^meta/', include('meta.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
+    # added by shinjan
+    url(r'^docs/', include_docs_urls(title='SEIL REST API '))
 
 ]

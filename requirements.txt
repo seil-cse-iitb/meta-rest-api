@@ -1,8 +1,8 @@
+coreapi
 django
-mysqlclient
 djangorestframework
-markdown
 django-filter
+markdown
+mysql-python==1.2.5
 pymongo
-pymysql
 paho-mqtt

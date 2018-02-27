@@ -1,6 +1,6 @@
 import time 
 import multiprocessing
-import pymysql
+import MySQLdb as pymysql
 import datetime
 import smtplib
 
@@ -24,12 +24,10 @@ class MailingThread(multiprocessing.Process):
         smtpserver.close()
 
     def get_maxid(self):
-        connection = pymysql.connect(host='10.129.23.22',
-                                 user='data_logging',
-                                 password='data_logging',
-                                 db='data_logging',
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
+        self.connection = pymysql.connect(host='10.129.23.41',
+                                     user='data_logging',
+                                     passwd='data_logging',
+                                     db='data_logging')
 
         cursor = connection.cursor()
 
@@ -50,12 +48,10 @@ class MailingThread(multiprocessing.Process):
         self.close_mail_connection(smtpserver)
         
     def get_message(self):
-        connection = pymysql.connect(host='10.129.23.22',
-                                 user='data_logging',
-                                 password='data_logging',
-                                 db='data_logging',
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
+        self.connection = pymysql.connect(host='10.129.23.41',
+                                     user='data_logging',
+                                     passwd='data_logging',
+                                     db='data_logging')
 
         cursor = connection.cursor()
 
@@ -72,10 +68,12 @@ class MailingThread(multiprocessing.Process):
         for x in rec:
             if self.max_id < int(x['id']):
                 self.max_id = int(x['id'])
-            if x[u'mail_to'] not in msg:
-                msg[x[u'mail_to']] =""
-            msg[x[u'mail_to']] += "At " + str(x[u'run_date']) + " " + str(x['id']) + " " + x['sensor_name'] + " " +  x['description'].format(actual = x['actual'], expected = x['expected']) + "\n"
-            print "At " + str(x[u'run_date']),x['sensor_name'] , x['description'].format(actual = x['actual'], expected = x['expected'])
+            for address in x[u'mail_to'].split(","):
+				
+				if address not in msg:
+					msg[address] =""
+				msg[address] += "At " + str(x[u'run_date']) + " " + str(x['id']) + " " + x['sensor_name'] + " " +  x['description'].format(actual = x['actual'], expected = x['expected']) + "\n"
+				print "At " + str(x[u'run_date']),x['sensor_name'] , x['description'].format(actual = x['actual'], expected = x['expected'])
         print "update counter to ",  self.max_id
         cursor.execute("update meta_stat set max_id = %s", (self.max_id,))
         connection.commit()
@@ -94,7 +92,7 @@ class MailingThread(multiprocessing.Process):
                 ctr = 0
                 msg = self.get_message()
                 for k in msg:
-                    self.send_alert_mail(k,msg[k], "Logging Alert")
+                    self.send_alert_mail(k,msg[k], "Data logging issue(s)")
             time.sleep(1)
             ctr += 1
             # time.sleep(1)

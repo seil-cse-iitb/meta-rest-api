@@ -3,6 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
 from .serializers import *
 
 from .models import Database, SensorChannel ,Sensor ,SensorType, DataField
@@ -19,8 +21,11 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-
+@api_view()
 def sensorLookup_rest(request, channel,location,sensor_type,mac):
+    """
+        Query sensor by channel, location, sensor_type and mac
+    """
     ch = SensorChannel.objects.filter(channel=channel,sensor_type=sensor_type)
     if len(ch) == 0:
         return HttpResponse("Channel information not available")
@@ -38,12 +43,40 @@ def database_rest(request, database_id):
     serializer = DatabaseSerializer(db[0])
     return JSONResponse(serializer.data)
 
-
+@api_view()
+@permission_classes((permissions.AllowAny,))
 def channel_fields_rest(request,channel_id):
+    """
+        Display list of fields present in the MQTT message for all sensors on this channel. The order of fields is important. 
+    """
     df = DataField.objects.filter(sensor_type=channel_id)
     if len(df) == 0:
         return HttpResponse('{"error":"Field information not available"}')
     serializer = FieldSerializer(df,many=True)
+    return JSONResponse(serializer.data)
+
+@api_view()
+@permission_classes((permissions.AllowAny,))
+def channel_view(request,channel_id):
+    """
+        Display list of all channels
+    """
+    df = SensorChannel.objects.filter(id=channel_id)
+    if len(df) == 0:
+        return HttpResponse('{"error":"Field information not available"}')
+    serializer = ChannelSerializer(df,many=True)
+    return JSONResponse(serializer.data)
+    
+@api_view()
+@permission_classes((permissions.AllowAny,))
+def channels_view(request):
+    """
+        Display list of all channels
+    """
+    df = SensorChannel.objects.all()
+    if len(df) == 0:
+        return HttpResponse('{"error":"Field information not available"}')
+    serializer = ChannelSerializer(df,many=True)
     return JSONResponse(serializer.data)
 
 
@@ -52,16 +85,17 @@ def databases(request):
     context = {'database_list': databases}
     return render(request, 'meta/databases.html', context)
 
-
+@api_view()
+@permission_classes((permissions.AllowAny,))
 def sensors(request):
     sensor = Sensor.objects.all()
     context = {'sensor_list': sensor}
     return render(request, 'meta/sensors.html', context)
 
-
+@api_view()
+@permission_classes((permissions.AllowAny,))
 def sensor_rest(request, sensor_id):
     return HttpResponse("You're looking at sensor %s." % sensor_id)
-
 
 def sensorTypes(request):
     sensor_type = SensorType.objects.all()
@@ -72,12 +106,25 @@ def sensorTypes(request):
 def sensorType_rest(request, sensor_type_id):
     return HttpResponse("You're looking at sensor Type %s." % sensor_type_id)
 
-
+@api_view()
+@permission_classes((permissions.AllowAny,))
 def sensor_list(request):
     """
-    List all code sensors, or create a new snippet.
+    List all sensors.
     """
     if request.method == 'GET':
         sensor = Sensor.objects.all()
         serializer = SensorSerializer(sensor, many=True)
         return JSONResponse(serializer.data)
+
+@api_view()
+@permission_classes((permissions.AllowAny,))
+def sensor_list_channel(request,channel_id):
+    """
+    List all sensors belonging to this channel.
+    """
+    df = Sensor.objects.filter(channel=channel_id)
+    if len(df) == 0:
+        return HttpResponse('{"error":"Field information not available"}')
+    serializer = SensorSerializer(df,many=True)
+    return JSONResponse(serializer.data)

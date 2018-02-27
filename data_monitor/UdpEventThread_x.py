@@ -31,7 +31,7 @@ class UdpEventThread(multiprocessing.Process):
 
     def log_event_for_msg(self, task_id,sensor_id, actual, expected):
         sql1 = "insert into meta_sensortask (task_id,sensor_id,run_date,status,actual, expected) values (%s, %s, %s, %s, %s, %s)"
-        connection = pymysql.connect(host='10.129.23.22',
+        connection = pymysql.connect(host='10.129.23.41',
                                      user='data_logging',
                                      password='data_logging',
                                      db='data_logging',

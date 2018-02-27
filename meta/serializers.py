@@ -4,7 +4,7 @@ from .models import Database, SensorChannel ,Sensor ,SensorType, DataField, Sens
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
-        fields = ('sensor_id','channel','sensor_name','location','mac_id','database','start_date')
+        fields = ('sensor_id','channel','sensor_name','public_name','location','mac_id','database','start_date')
 
 class DatabaseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,3 +20,8 @@ class SensorDatabaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorDatabase
         fields = ('sensor','purpose','database')
+
+class ChannelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SensorChannel
+        fields = ('id','sensor_type','display_name','channel')

@@ -1,7 +1,7 @@
 import time 
 import multiprocessing
 import paho.mqtt.client as mqtt
-import pymysql
+import MySQLdb as pymysql
 import datetime
 import Queue
 
@@ -36,12 +36,10 @@ class MqttEventThread(multiprocessing.Process):
         sql0 += "location = %s and s.channel_id = c.id and sensor_type_id = %s and mac_id = %s "
 
         sql1 = "insert into meta_sensortask (task_id,sensor_id,run_date,status,actual, expected) values (%s, %s, %s, %s, %s, %s)"
-        connection = pymysql.connect(host='10.129.23.22',
+        self.connection = pymysql.connect(host='10.129.23.41',
                                      user='data_logging',
-                                     password='data_logging',
-                                     db='data_logging',
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
+                                     passwd='data_logging',
+                                     db='data_logging')
 
         cursor = connection.cursor()
         t = tuple(topic.split("/"))

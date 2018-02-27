@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'data_logging',
         'USER': 'data_logging',
         'PASSWORD': 'data_logging',
-        'HOST': '10.129.23.22',   # Or an IP Address that your DB is hosted on
+        'HOST': '10.129.149.9',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
