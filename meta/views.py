@@ -10,6 +10,8 @@ from .serializers import *
 from .models import Database, SensorChannel ,Sensor ,SensorType, DataField
 # Create your views here.
 from django.http import HttpResponse
+# added by sapan
+from functions import send_mail
 
 
 class JSONResponse(HttpResponse):
@@ -22,6 +24,7 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 @api_view()
+@permission_classes((permissions.AllowAny,))
 def sensorLookup_rest(request, channel,location,sensor_type,mac):
     """
         Query sensor by channel, location, sensor_type and mac
@@ -128,3 +131,31 @@ def sensor_list_channel(request,channel_id):
         return HttpResponse('{"error":"Field information not available"}')
     serializer = SensorSerializer(df,many=True)
     return JSONResponse(serializer.data)
+
+# view_mail function added by sapan
+def views_mail(request):
+    to = ""
+    body = ""
+    subject = ""
+    if request.method == 'GET':
+        to = request.GET.get('to',"")
+        body = request.GET.get('body',"")
+        subject = request.GET.get('subject',"")
+    elif request.method == 'POST':
+        to = request.POST.get('to',"")
+        body = request.POST.get('body',"")
+        subject = request.POST.get('subject',"")
+
+    message =""
+    if to=="":
+        message= "Failed!! parameter 'to' required"
+    elif body=="":
+        message = "Failed!! parameter 'body' required"
+    elif subject=="":
+        message= "Failed!! parameter 'subject' required"
+
+    if to !="" and body !=""  and subject !="" :
+        send_mail(to, body, subject)
+        return HttpResponse("Success!!<br><br>To: " + to + "<br>Subject: " + subject + "<br>Body: " + body)
+    else:
+        return HttpResponse(message+"<br><br>To: " + to + "<br>Subject: " + subject + "<br>Body: " + body)

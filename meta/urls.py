@@ -37,5 +37,8 @@ urlpatterns = [
     url(r'^sensor_types/$', views.sensorTypes, name='sensors_types'),
     # ex: /meta/sensor_type/<type>
     url(r'^sensor_type/(?P<sensor_type_id>.+)/$', views.sensorType_rest, name='db_id'),
-
+    
+    #added by sapan
+    url(r'^mail/', views.views_mail),
+    
 ]

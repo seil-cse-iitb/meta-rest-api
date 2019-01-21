@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'data_logging.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'data_logging',
-        'USER': 'data_logging',
-        'PASSWORD': 'data_logging',
-        'HOST': '10.129.149.9',   # Or an IP Address that your DB is hosted on
+        'NAME': 'seil_meta_api',
+        'USER': 'meta',
+        'PASSWORD': 'meta@seil',
+        'HOST': 'mysql.seil.cse.iitb.ac.in',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
